@@ -8,6 +8,8 @@ IMAGE = "todo-frontend:${BUILD_NUMBER}"
  
 CONT = "todo-frontend"
  
+NETWORK = "app-net"
+ 
 }
  
 stages {
@@ -38,9 +40,11 @@ stage('Run Container') {
  
 steps {
  
-bat 'docker rm -f %CONT% || true'
+bat 'docker network create %NETWORK% 2>nul || ver > nul'
  
-bat 'docker run -d --name %CONT% --label com.docker.compose.project=todoapp -p 4200:80 %IMAGE%'
+bat 'docker rm -f %CONT% 2>nul || ver > nul'
+ 
+bat 'docker run -d --name %CONT% --network %NETWORK% --label com.docker.compose.project=todoapp -p 4200:80 %IMAGE%'
  
 }
  
