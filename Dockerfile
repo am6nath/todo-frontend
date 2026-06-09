@@ -3,7 +3,7 @@ FROM node:20 AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --no-audit --no-fund
+RUN yarn install
 
 COPY . .
 RUN npm run build -- --configuration=production
