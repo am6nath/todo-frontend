@@ -28,7 +28,7 @@ stage('Build Docker Image') {
  
 steps {
  
-bat 'docker build --network=host -t %IMAGE% .'
+        bat 'docker build -t %IMAGE% .'
  
 }
  
@@ -40,7 +40,7 @@ steps {
  
 bat 'docker rm -f %CONT% || true'
  
-bat 'docker run -d --name %CONT% -p 4200:80 %IMAGE%'
+bat 'docker run -d --name %CONT% --label com.docker.compose.project=todoapp -p 4200:80 %IMAGE%'
  
 }
  
