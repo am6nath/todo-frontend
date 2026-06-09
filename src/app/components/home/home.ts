@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TodoService, Todo } from '../../services/todo.service';
@@ -13,6 +13,7 @@ import { TodoService, Todo } from '../../services/todo.service';
 export class Home implements OnInit {
   private fb = inject(FormBuilder);
   private todoService = inject(TodoService);
+  private cdr = inject(ChangeDetectorRef);
 
   todos: Todo[] = [];
   loading: boolean = true;
@@ -31,21 +32,25 @@ export class Home implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadTodos();
+    this.loadTodos(true);
   }
 
-  loadTodos(): void {
-    this.loading = true;
+  loadTodos(showLoader: boolean = false): void {
+    if (showLoader) {
+      this.loading = true;
+    }
     this.todoService.getTodos(this.currentPage, this.pageSize).subscribe({
       next: data => {
         this.todos = data.items;
         this.totalCount = data.totalCount;
         this.totalPages = data.totalPages;
         this.loading = false;
+        this.cdr.detectChanges(); // Enforce instant UI update
       },
       error: err => {
         this.loading = false;
         this.errorMessage = 'Failed to load tasks. Please try again later.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -63,12 +68,13 @@ export class Home implements OnInit {
       next: () => {
         this.todoForm.reset();
         this.submitting = false;
-        this.currentPage = 1; // Reset to page 1 to see the new task
-        this.loadTodos();
+        this.currentPage = 1; // Reset to page 1
+        this.loadTodos(false); // Load in background to prevent flashing loader
       },
       error: err => {
         this.submitting = false;
         this.errorMessage = err.error?.message || 'Failed to create task.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -76,6 +82,7 @@ export class Home implements OnInit {
   toggleComplete(todo: Todo): void {
     const previousState = todo.isCompleted;
     todo.isCompleted = !todo.isCompleted;
+    this.cdr.detectChanges(); // Render state check immediately
     
     const updatePayload = {
       title: todo.title,
@@ -85,11 +92,12 @@ export class Home implements OnInit {
 
     this.todoService.updateTodo(todo.id, updatePayload).subscribe({
       next: () => {
-        this.loadTodos();
+        this.loadTodos(false); // Reload silently in background
       },
       error: () => {
         todo.isCompleted = previousState;
         this.errorMessage = 'Failed to update task state.';
+        this.cdr.detectChanges();
       }
     });
   }
@@ -98,14 +106,14 @@ export class Home implements OnInit {
     if (confirm('Are you sure you want to delete this task?')) {
       this.todoService.deleteTodo(id).subscribe({
         next: () => {
-          // If the last item on the page is deleted, go back a page
           if (this.todos.length === 1 && this.currentPage > 1) {
             this.currentPage--;
           }
-          this.loadTodos();
+          this.loadTodos(false); // Reload silently in background
         },
         error: () => {
           this.errorMessage = 'Failed to delete task.';
+          this.cdr.detectChanges();
         }
       });
     }
@@ -114,7 +122,7 @@ export class Home implements OnInit {
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadTodos();
+      this.loadTodos(true); // Show loader during page transitions
     }
   }
 
