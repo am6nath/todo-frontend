@@ -3,7 +3,7 @@ FROM node:20 AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN yarn config set strict-ssl false && yarn install
+RUN yarn config set strict-ssl false && yarn install --ignore-optional
 
 COPY . .
 RUN npm run build -- --configuration=production
