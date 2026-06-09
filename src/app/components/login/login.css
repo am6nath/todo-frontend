@@ -11,7 +11,7 @@
 .auth-card {
   background: #ffffff;
   padding: 2rem;
-  border: 2px solid #0f172a;
+  border: 1px solid #0f172a;
   width: 100%;
   max-width: 400px;
   box-sizing: border-box;
@@ -54,7 +54,7 @@
 
 .form-group input {
   padding: 0.5rem;
-  border: 2px solid #0f172a;
+  /* border: 2px solid #0f172a; */
   font-size: 0.95rem;
   color: #0f172a;
   box-sizing: border-box;

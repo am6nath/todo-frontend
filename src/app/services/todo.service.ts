@@ -19,8 +19,14 @@ export class TodoService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:5000/api/todo';
 
-  getTodos(): Observable<Todo[]> {
-    return this.http.get<Todo[]>(this.apiUrl);
+  getTodos(page: number = 1, pageSize: number = 5): Observable<{
+    items: Todo[];
+    totalCount: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  }> {
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&pageSize=${pageSize}`);
   }
 
   getTodoById(id: number): Observable<Todo> {

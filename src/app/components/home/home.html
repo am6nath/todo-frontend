@@ -104,6 +104,14 @@
             </div>
           </div>
         </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container" *ngIf="totalPages > 1">
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">Previous</button>
+          <span class="page-info">Page {{ currentPage }} of {{ totalPages }} (Total: {{ totalCount }})</span>
+          <button class="page-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">Next</button>
+        </div>
+
       </div>
     </div>
   </div>

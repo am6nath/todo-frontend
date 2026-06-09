@@ -19,6 +19,12 @@ export class Home implements OnInit {
   submitting: boolean = false;
   errorMessage: string | null = null;
 
+  // Pagination fields
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalCount: number = 0;
+  totalPages: number = 0;
+
   todoForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', [Validators.maxLength(500)]]
@@ -30,9 +36,11 @@ export class Home implements OnInit {
 
   loadTodos(): void {
     this.loading = true;
-    this.todoService.getTodos().subscribe({
+    this.todoService.getTodos(this.currentPage, this.pageSize).subscribe({
       next: data => {
-        this.todos = data;
+        this.todos = data.items;
+        this.totalCount = data.totalCount;
+        this.totalPages = data.totalPages;
         this.loading = false;
       },
       error: err => {
@@ -52,10 +60,11 @@ export class Home implements OnInit {
     this.errorMessage = null;
 
     this.todoService.createTodo(this.todoForm.value).subscribe({
-      next: newTodo => {
-        this.todos.unshift(newTodo); // Add to the top
+      next: () => {
         this.todoForm.reset();
         this.submitting = false;
+        this.currentPage = 1; // Reset to page 1 to see the new task
+        this.loadTodos();
       },
       error: err => {
         this.submitting = false;
@@ -65,7 +74,6 @@ export class Home implements OnInit {
   }
 
   toggleComplete(todo: Todo): void {
-    // Optimistic UI update
     const previousState = todo.isCompleted;
     todo.isCompleted = !todo.isCompleted;
     
@@ -77,11 +85,9 @@ export class Home implements OnInit {
 
     this.todoService.updateTodo(todo.id, updatePayload).subscribe({
       next: () => {
-        // Reload list to get updated completed timestamps from DB
         this.loadTodos();
       },
       error: () => {
-        // Revert on error
         todo.isCompleted = previousState;
         this.errorMessage = 'Failed to update task state.';
       }
@@ -90,16 +96,25 @@ export class Home implements OnInit {
 
   deleteTodo(id: number): void {
     if (confirm('Are you sure you want to delete this task?')) {
-      const originalTodos = [...this.todos];
-      this.todos = this.todos.filter(t => t.id !== id);
-
       this.todoService.deleteTodo(id).subscribe({
+        next: () => {
+          // If the last item on the page is deleted, go back a page
+          if (this.todos.length === 1 && this.currentPage > 1) {
+            this.currentPage--;
+          }
+          this.loadTodos();
+        },
         error: () => {
-          // Revert on error
-          this.todos = originalTodos;
           this.errorMessage = 'Failed to delete task.';
         }
       });
+    }
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadTodos();
     }
   }
 
