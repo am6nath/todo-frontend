@@ -12,6 +12,10 @@ NETWORK = "app-net"
  
 }
  
+triggers {
+    pollSCM('* * * * *')
+}
+ 
 stages {
  
 stage('Checkout') {
