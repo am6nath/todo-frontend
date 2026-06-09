@@ -5,7 +5,7 @@
       <p class="subtitle">Create an account to track your todos</p>
     </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)"onSubmit()" (ngSubmit)="onSubmit()" class="auth-form">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="alert alert-danger" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
