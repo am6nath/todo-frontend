@@ -1,0 +1,122 @@
+<div class="dashboard-container">
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+    <button class="close-alert-btn" (click)="errorMessage = null">×</button>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Left column: Add task form -->
+    <div class="form-panel">
+      <div class="card">
+        <h3>Create New Task</h3>
+        <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="task-form">
+          <div class="form-group">
+            <label for="title">Task Title</label>
+            <input 
+              type="text" 
+              id="title" 
+              formControlName="title" 
+              placeholder="What needs to be done?"
+              [class.input-error]="isFieldInvalid('title')"
+            />
+            <span class="error-text" *ngIf="isFieldInvalid('title')">
+              <span *ngIf="todoForm.get('title')?.errors?.['required']">Title is required.</span>
+              <span *ngIf="todoForm.get('title')?.errors?.['maxlength']">Title cannot exceed 100 characters.</span>
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description (Optional)</label>
+            <textarea 
+              id="description" 
+              formControlName="description" 
+              placeholder="Add details about this task..."
+              rows="3"
+              [class.input-error]="isFieldInvalid('description')"
+            ></textarea>
+            <span class="error-text" *ngIf="isFieldInvalid('description')">
+              Description cannot exceed 500 characters.
+            </span>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="submitting">
+            <span *ngIf="!submitting">+ Add Task</span>
+            <span *ngIf="submitting" class="spinner"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right column: Todos list -->
+    <div class="list-panel">
+      <div class="loader-container" *ngIf="loading">
+        <div class="page-spinner"></div>
+        <p>Loading your tasks...</p>
+      </div>
+
+      <div class="tasks-content" *ngIf="!loading">
+        <!-- Active Tasks -->
+        <div class="tasks-section">
+          <h4 class="section-title">Active Tasks ({{ activeTodos.length }})</h4>
+          
+          <div class="empty-state" *ngIf="activeTodos.length === 0">
+            <span class="empty-icon">✓</span>
+            <p>No active tasks. You're all caught up!</p>
+          </div>
+
+          <div class="tasks-list" *ngIf="activeTodos.length > 0">
+            <div class="task-item" *ngFor="let todo of activeTodos">
+              <div class="task-checkbox-container">
+                <input 
+                  type="checkbox" 
+                  [checked]="todo.isCompleted" 
+                  (change)="toggleComplete(todo)" 
+                  [id]="'todo-' + todo.id"
+                />
+                <label [for]="'todo-' + todo.id" class="checkbox-label"></label>
+              </div>
+              <div class="task-details">
+                <h5 class="task-title">{{ todo.title }}</h5>
+                <p class="task-desc" *ngIf="todo.description">{{ todo.description }}</p>
+                <span class="task-meta">Created {{ todo.createdAt | date:'short' }}</span>
+              </div>
+              <button class="delete-btn" (click)="deleteTodo(todo.id)" title="Delete Task">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v200H560v-200H400v200H280Zm80-120h80v-320h-80v320Zm160 0h80v-320h-80v320Z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completed Tasks -->
+        <div class="tasks-section completed-section" *ngIf="completedTodos.length > 0">
+          <h4 class="section-title">Completed Tasks ({{ completedTodos.length }})</h4>
+          <div class="tasks-list">
+            <div class="task-item completed-item" *ngFor="let todo of completedTodos">
+              <div class="task-checkbox-container">
+                <input 
+                  type="checkbox" 
+                  [checked]="todo.isCompleted" 
+                  (change)="toggleComplete(todo)" 
+                  [id]="'todo-' + todo.id"
+                />
+                <label [for]="'todo-' + todo.id" class="checkbox-label"></label>
+              </div>
+              <div class="task-details">
+                <h5 class="task-title">{{ todo.title }}</h5>
+                <p class="task-desc" *ngIf="todo.description">{{ todo.description }}</p>
+                <span class="task-meta" *ngIf="todo.completedAt">Completed {{ todo.completedAt | date:'short' }}</span>
+              </div>
+              <button class="delete-btn" (click)="deleteTodo(todo.id)" title="Delete Task">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor">
+                  <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T760-120H280Zm80-200h80v-320h-80v320Zm160 0h80v-320h-80v320Z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
