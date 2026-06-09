@@ -6,10 +6,19 @@
 }
 
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 320px 1fr;
+  display: flex;
+  flex-direction: row;
   gap: 1.5rem;
-  align-items: start;
+  align-items: flex-start;
+}
+
+.form-panel {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.list-panel {
+  flex-grow: 1;
 }
 
 .card {
@@ -276,6 +285,9 @@
 
 @media (max-width: 768px) {
   .dashboard-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+  .form-panel {
+    width: 100%;
   }
 }
