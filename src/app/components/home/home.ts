@@ -21,7 +21,7 @@ export class Home implements OnInit {
   errorMessage: string | null = null;
 
   currentPage: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 10;
   totalCount: number = 0;
   totalPages: number = 0;
 

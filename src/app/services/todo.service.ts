@@ -19,7 +19,7 @@ export class TodoService {
   private http = inject(HttpClient);
   private apiUrl = '/api/todo';
 
-  getTodos(page: number = 1, pageSize: number = 5): Observable<{
+  getTodos(page: number = 1, pageSize: number = 10): Observable<{
     items: Todo[];
     totalCount: number;
     page: number;
