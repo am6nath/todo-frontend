@@ -20,7 +20,6 @@ export class Home implements OnInit {
   submitting: boolean = false;
   errorMessage: string | null = null;
 
-  // Pagination fields
   currentPage: number = 1;
   pageSize: number = 5;
   totalCount: number = 0;
@@ -45,7 +44,7 @@ export class Home implements OnInit {
         this.totalCount = data.totalCount;
         this.totalPages = data.totalPages;
         this.loading = false;
-        this.cdr.detectChanges(); // Enforce instant UI update
+        this.cdr.detectChanges();
       },
       error: err => {
         this.loading = false;
@@ -68,8 +67,8 @@ export class Home implements OnInit {
       next: () => {
         this.todoForm.reset();
         this.submitting = false;
-        this.currentPage = 1; // Reset to page 1
-        this.loadTodos(false); // Load in background to prevent flashing loader
+        this.currentPage = 1;
+        this.loadTodos(false);
       },
       error: err => {
         this.submitting = false;
@@ -82,7 +81,7 @@ export class Home implements OnInit {
   toggleComplete(todo: Todo): void {
     const previousState = todo.isCompleted;
     todo.isCompleted = !todo.isCompleted;
-    this.cdr.detectChanges(); // Render state check immediately
+    this.cdr.detectChanges();
     
     const updatePayload = {
       title: todo.title,
@@ -92,7 +91,7 @@ export class Home implements OnInit {
 
     this.todoService.updateTodo(todo.id, updatePayload).subscribe({
       next: () => {
-        this.loadTodos(false); // Reload silently in background
+        this.loadTodos(false);
       },
       error: () => {
         todo.isCompleted = previousState;
@@ -109,7 +108,7 @@ export class Home implements OnInit {
           if (this.todos.length === 1 && this.currentPage > 1) {
             this.currentPage--;
           }
-          this.loadTodos(false); // Reload silently in background
+          this.loadTodos(false);
         },
         error: () => {
           this.errorMessage = 'Failed to delete task.';
@@ -122,7 +121,7 @@ export class Home implements OnInit {
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.loadTodos(true); // Show loader during page transitions
+      this.loadTodos(true);
     }
   }
 

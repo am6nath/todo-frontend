@@ -11,7 +11,6 @@ export class AuthService {
   private router = inject(Router);
   private apiUrl = 'http://localhost:5000/api/auth';
 
-  // Signals to track authentication state and current user name
   currentUser = signal<string | null>(localStorage.getItem('userName'));
   isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));
 
@@ -25,10 +24,8 @@ export class AuthService {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
           
-          // Decode simple token payload to get user name
           try {
             const payload = JSON.parse(atob(response.token.split('.')[1]));
-            // Standard JWT claim for Name is 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'
             const userName = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || payload.unique_name || 'User';
             localStorage.setItem('userName', userName);
             this.currentUser.set(userName);
