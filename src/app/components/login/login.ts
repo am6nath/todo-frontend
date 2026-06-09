@@ -16,8 +16,9 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  // Email regex pattern validator
   loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
     password: ['', [Validators.required]]
   });
 

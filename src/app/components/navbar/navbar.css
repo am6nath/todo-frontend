@@ -1,8 +1,6 @@
 .navbar {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  background: #ffffff;
+  border-bottom: 2px solid #0f172a;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -20,29 +18,12 @@
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.logo-icon {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .logo-text {
   font-size: 1.25rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #1e1b4b 0%, #4f46e5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  color: #0f172a;
   letter-spacing: -0.025em;
 }
 
@@ -54,32 +35,21 @@
 
 .welcome-text {
   color: #475569;
-  font-size: 0.9rem;
-}
-
-.user-name {
-  color: #1e293b;
+  font-size: 0.875rem;
 }
 
 .logout-btn {
   background: transparent;
-  border: 1px solid #cbd5e1;
-  color: #64748b;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  border: 2px solid #0f172a;
+  color: #0f172a;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
   background: #f1f5f9;
-  color: #0f172a;
-  border-color: #94a3b8;
 }
 
 @media (max-width: 640px) {

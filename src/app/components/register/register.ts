@@ -28,10 +28,22 @@ export class Register {
     return null;
   }
 
+  // Reactive Form with Regex Validators
   registerForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.maxLength(50)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    name: ['', [
+      Validators.required, 
+      Validators.maxLength(50), 
+      Validators.pattern('^[a-zA-Z\\s]+$') // Letters and spaces only
+    ]],
+    email: ['', [
+      Validators.required, 
+      Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') // Valid email format
+    ]],
+    password: ['', [
+      Validators.required, 
+      Validators.minLength(6),
+      Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$') // At least 1 uppercase, 1 lowercase, 1 digit
+    ]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: this.passwordMatchValidator });
 

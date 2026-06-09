@@ -1,9 +1,8 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <div class="logo-badge">✓</div>
-      <h2>Welcome Back</h2>
-      <p class="subtitle">Simplify your day and manage your tasks</p>
+      <h2>Sign In</h2>
+      <p class="subtitle">Enter credentials to access your tasks</p>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
@@ -12,17 +11,17 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email Address</label>
+        <label for="email">Email</label>
         <input 
           type="email" 
           id="email" 
           formControlName="email" 
-          placeholder="name@example.com"
+          placeholder="email@domain.com"
           [class.input-error]="isFieldInvalid('email')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('email')">
           <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
-          <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email.</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['pattern']">Please enter a valid email address.</span>
         </span>
       </div>
 
@@ -32,7 +31,7 @@
           type="password" 
           id="password" 
           formControlName="password" 
-          placeholder="••••••••"
+          placeholder="Password"
           [class.input-error]="isFieldInvalid('password')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('password')">
@@ -42,12 +41,12 @@
 
       <button type="submit" class="submit-btn" [disabled]="loading">
         <span *ngIf="!loading">Sign In</span>
-        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="loading">Signing in...</span>
       </button>
     </form>
 
     <div class="auth-footer">
-      <p>Don't have an account? <a routerLink="/register">Create one</a></p>
+      <p>Need an account? <a routerLink="/register">Register</a></p>
     </div>
   </div>
 </div>

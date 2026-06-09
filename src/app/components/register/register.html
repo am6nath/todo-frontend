@@ -1,12 +1,11 @@
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
-      <div class="logo-badge">✓</div>
-      <h2>Create Account</h2>
-      <p class="subtitle">Join TaskMaster to organize your tasks</p>
+      <h2>Register</h2>
+      <p class="subtitle">Create an account to track your todos</p>
     </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+    <form [formGroup]="registerForm" (ngSubmit)"onSubmit()" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="alert alert-danger" *ngIf="errorMessage">
         {{ errorMessage }}
       </div>
@@ -16,32 +15,33 @@
       </div>
 
       <div class="form-group">
-        <label for="name">Full Name</label>
+        <label for="name">Name</label>
         <input 
           type="text" 
           id="name" 
           formControlName="name" 
-          placeholder="John Doe"
+          placeholder="Full Name"
           [class.input-error]="isFieldInvalid('name')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('name')">
           <span *ngIf="registerForm.get('name')?.errors?.['required']">Name is required.</span>
           <span *ngIf="registerForm.get('name')?.errors?.['maxlength']">Name cannot exceed 50 characters.</span>
+          <span *ngIf="registerForm.get('name')?.errors?.['pattern']">Name can only contain letters and spaces.</span>
         </span>
       </div>
 
       <div class="form-group">
-        <label for="email">Email Address</label>
+        <label for="email">Email</label>
         <input 
           type="email" 
           id="email" 
           formControlName="email" 
-          placeholder="name@example.com"
+          placeholder="email@domain.com"
           [class.input-error]="isFieldInvalid('email')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('email')">
           <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required.</span>
-          <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email.</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['pattern']">Please enter a valid email.</span>
         </span>
       </div>
 
@@ -51,12 +51,13 @@
           type="password" 
           id="password" 
           formControlName="password" 
-          placeholder="••••••••"
+          placeholder="••••••"
           [class.input-error]="isFieldInvalid('password')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('password')">
           <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required.</span>
-          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters.</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['pattern']">Password must contain 1 uppercase, 1 lowercase letter, and 1 digit.</span>
         </span>
       </div>
 
@@ -66,7 +67,7 @@
           type="password" 
           id="confirmPassword" 
           formControlName="confirmPassword" 
-          placeholder="••••••••"
+          placeholder="••••••"
           [class.input-error]="isFieldInvalid('confirmPassword')"
         />
         <span class="error-text" *ngIf="isFieldInvalid('confirmPassword')">
@@ -76,13 +77,13 @@
       </div>
 
       <button type="submit" class="submit-btn" [disabled]="loading">
-        <span *ngIf="!loading">Create Account</span>
-        <span *ngIf="loading" class="spinner"></span>
+        <span *ngIf="!loading">Register</span>
+        <span *ngIf="loading">Registering...</span>
       </button>
     </form>
 
     <div class="auth-footer">
-      <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+      <p>Have an account? <a routerLink="/login">Sign In</a></p>
     </div>
   </div>
 </div>
