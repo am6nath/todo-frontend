@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:5076/api/auth';
+  private apiUrl = '/api/auth';
 
   currentUser = signal<string | null>(localStorage.getItem('userName'));
   isAuthenticated = signal<boolean>(!!localStorage.getItem('token'));

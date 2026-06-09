@@ -17,7 +17,7 @@ export interface Todo {
 })
 export class TodoService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:5076/api/todo';
+  private apiUrl = '/api/todo';
 
   getTodos(page: number = 1, pageSize: number = 5): Observable<{
     items: Todo[];
