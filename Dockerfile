@@ -3,7 +3,7 @@ FROM node:20 AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --omit=optional
+RUN npm config set progress false && npm install --omit=optional --no-audit --no-fund --loglevel error
 
 COPY . .
 RUN npm run build -- --configuration=production
